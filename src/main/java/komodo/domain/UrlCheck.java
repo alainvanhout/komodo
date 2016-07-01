@@ -1,34 +1,32 @@
 package komodo.domain;
 
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
-public class Endpoint {
+public class UrlCheck implements Check {
     private String url;
     // in seconds
-    private int interval = 60;
-    private LocalDateTime last;
+    private double interval = 60;
+    private transient LocalDateTime last;
 
-    public Endpoint(String url) {
+    public UrlCheck(String url) {
         this.url = url;
         last = LocalDateTime.now();
     }
-
 
     public String getUrl() {
         return this.url;
     }
 
-    public Endpoint url(String url) {
+    public UrlCheck url(String url) {
         this.url = url;
         return this;
     }
 
-    public int getInterval() {
+    public double getInterval() {
         return this.interval;
     }
 
-    public Endpoint interval(int interval) {
+    public UrlCheck interval(int interval) {
         this.interval = interval;
         return this;
     }
@@ -37,7 +35,7 @@ public class Endpoint {
         return last;
     }
 
-    public Endpoint last(LocalDateTime last) {
+    public UrlCheck last(LocalDateTime last) {
         this.last = last;
         return this;
     }
