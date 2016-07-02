@@ -7,6 +7,8 @@ public class UrlCheck implements Check {
     // in seconds
     private double interval = 60;
     private transient LocalDateTime last;
+    private Effect failureEffect;
+    private boolean success;
 
     public UrlCheck(String url) {
         this.url = url;
@@ -37,6 +39,30 @@ public class UrlCheck implements Check {
 
     public UrlCheck last(LocalDateTime last) {
         this.last = last;
+        return this;
+    }
+
+    @Override
+    public String getStatus() {
+        return url + " : " + (success ? "ok" : "failure");
+    }
+
+    @Override
+    public Effect getFailureEffect() {
+        return failureEffect;
+    }
+
+    public Check failureEffect(Effect failureEffect) {
+        this.failureEffect = failureEffect;
+        return this;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public Check success(boolean success) {
+        this.success = success;
         return this;
     }
 }

@@ -1,7 +1,6 @@
 package komodo.runners;
 
 import komodo.domain.Check;
-import komodo.domain.UrlCheck;
 
 public interface CheckRunner<T extends Check> {
 

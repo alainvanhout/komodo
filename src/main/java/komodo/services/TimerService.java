@@ -52,4 +52,8 @@ public class TimerService {
                         .filter(entry.getKey()::shouldRun)
                         .forEach(entry.getKey()::run));
     }
+
+    public List<Check> getChecks() {
+        return checks;
+    }
 }

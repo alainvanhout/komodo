@@ -1,0 +1,9 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+    <h1>overview</h1>
+
+    <p th:each="check : ${checks}" th:text="${check.status}"></p>
+
+</body>
+</html>

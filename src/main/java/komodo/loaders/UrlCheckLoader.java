@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import komodo.domain.Check;
+import komodo.domain.MailEffect;
 import komodo.domain.UrlCheck;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +25,9 @@ import java.util.List;
 public class UrlCheckLoader implements CheckLoader {
 
     private Gson gson;
+
+    @Autowired
+    private MailEffect mailEffect;
 
     @PostConstruct
     private void init() {
@@ -56,6 +61,7 @@ public class UrlCheckLoader implements CheckLoader {
             reader = new JsonReader(new FileReader(file.getAbsolutePath()));
             UrlCheck urlCheck = gson.fromJson(reader, UrlCheck.class);
             urlCheck.last(LocalDateTime.now());
+            urlCheck.failureEffect(mailEffect);
             return urlCheck;
         } finally {
             IOUtils.closeQuietly(reader);
