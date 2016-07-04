@@ -1,4 +1,7 @@
-package komodo.domain;
+package komodo.urlcheck;
+
+import komodo.domain.Check;
+import komodo.domain.Effect;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +12,8 @@ public class UrlCheck implements Check {
     private transient LocalDateTime last;
     private Effect failureEffect;
     private boolean success;
+    private String username;
+    private String password;
 
     public UrlCheck(String url) {
         this.url = url;
@@ -63,6 +68,24 @@ public class UrlCheck implements Check {
 
     public Check success(boolean success) {
         this.success = success;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public UrlCheck username(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public UrlCheck password(String password) {
+        this.password = password;
         return this;
     }
 }

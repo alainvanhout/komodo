@@ -1,7 +1,6 @@
 package komodo.services;
 
 import komodo.domain.Check;
-import komodo.domain.UrlCheck;
 import komodo.loaders.CheckLoader;
 import komodo.runners.CheckRunner;
 import org.springframework.beans.factory.annotation.Autowired;

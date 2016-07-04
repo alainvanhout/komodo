@@ -1,15 +1,11 @@
-package komodo.runners;
+package komodo.urlcheck;
 
 import komodo.domain.Check;
 import komodo.domain.Effect;
-import komodo.domain.UrlCheck;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import komodo.runners.CheckRunner;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Duration;
@@ -25,6 +21,13 @@ public class UrlCheckRunner implements CheckRunner<UrlCheck> {
         try {
             connection = (HttpURLConnection) new URL(check.getUrl()).openConnection();
             connection.setRequestMethod("GET");
+
+            if (check.getUsername() != null && check.getPassword() != null) {
+                String userCredentials = check.getUsername() + ":" + check.getPassword();
+                String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+                connection.setRequestProperty("Authorization", basicAuth);
+            }
+
             int responseCode = connection.getResponseCode();
             check.last(LocalDateTime.now());
 

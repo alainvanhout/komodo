@@ -1,11 +1,11 @@
-package komodo.loaders;
+package komodo.urlcheck;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import komodo.domain.Check;
 import komodo.domain.MailEffect;
-import komodo.domain.UrlCheck;
+import komodo.loaders.CheckLoader;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
