@@ -11,7 +11,7 @@ public class UrlCheck implements Check {
     private double interval = 60;
     private transient LocalDateTime last;
     private Effect failureEffect;
-    private boolean success;
+    private Boolean success;
     private String username;
     private String password;
 
@@ -49,7 +49,7 @@ public class UrlCheck implements Check {
 
     @Override
     public String getStatus() {
-        return url + " : " + (success ? "ok" : "failure");
+        return url + " : " + (success == null ? "?" : (success ? "ok" : "failure"));
     }
 
     @Override
@@ -62,11 +62,11 @@ public class UrlCheck implements Check {
         return this;
     }
 
-    public boolean isSuccess() {
+    public Boolean isSuccess() {
         return success;
     }
 
-    public Check success(boolean success) {
+    public Check success(Boolean success) {
         this.success = success;
         return this;
     }
