@@ -4,6 +4,7 @@ import komodo.actions.Action;
 import komodo.actions.runners.ActionRunner;
 import komodo.plans.Plan;
 import komodo.plans.loaders.FilePlanLoader;
+import komodo.plans.loaders.FolderPlanLoader;
 import komodo.plans.loaders.PlanLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,7 +35,7 @@ public class TimerService {
             runners.put(actionRunner.getId(), actionRunner);
         }
 
-        PlanLoader planLoader = new FilePlanLoader(new File("plans/check-localhost-ping.json"));
+        PlanLoader planLoader = new FolderPlanLoader(new File("plans/"));
         planLoader.reload();
 
         plans = planLoader.getPlans();

@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class Plan {
 
+    private String name;
+
     private Action check = new Action();
     private Action success = new Action();
     private Action failure = new Action();
@@ -48,7 +50,6 @@ public class Plan {
         this.config = config;
     }
 
-
     public LocalDateTime getLast() {
         return last;
     }
@@ -61,5 +62,13 @@ public class Plan {
     public boolean shouldRun() {
         LocalDateTime now = LocalDateTime.now();
         return last == null || Duration.between(last, now).toMillis() >= interval * 1000 - 100;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

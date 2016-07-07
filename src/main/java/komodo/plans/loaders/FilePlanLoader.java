@@ -5,6 +5,7 @@ import komodo.actions.loaders.ActionLoader;
 import komodo.plans.Plan;
 import komodo.utils.JsonUtil;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,10 +24,16 @@ public class FilePlanLoader implements PlanLoader {
 
     @Override
     public void reload() {
+        if (!file.exists()){
+            throw new IllegalArgumentException("File does not exist: " + file.getAbsolutePath());
+        }
         try {
             plan = JsonUtil.toObject(IOUtils.toString(new FileInputStream(file)), Plan.class);
+            if (StringUtils.isBlank(plan.getName())){
+                plan.setName(file.getName());
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Could not access file: " + file.getAbsolutePath());
         }
     }
 

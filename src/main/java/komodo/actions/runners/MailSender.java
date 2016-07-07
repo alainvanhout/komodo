@@ -32,7 +32,7 @@ public class MailSender implements ActionRunner {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(text + " - " + LocalTime.now());
+            helper.setText(text);
 
             sender.send(message);
             return true;
