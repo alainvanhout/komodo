@@ -1,58 +1,72 @@
 package komodo.services;
 
-import komodo.domain.Check;
-import komodo.loaders.CheckLoader;
-import komodo.runners.CheckRunner;
+import komodo.actions.Action;
+import komodo.actions.runners.ActionRunner;
+import komodo.plans.Plan;
+import komodo.plans.loaders.FilePlanLoader;
+import komodo.plans.loaders.PlanLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TimerService {
 
-    private List<Check> checks;
-    private Map<CheckRunner, List<Check>> map;
-
     @Autowired
-    private Collection<CheckRunner> checkRunners;
+    private Collection<ActionRunner> actionRunners;
 
-    @Autowired
-    private Collection<CheckLoader> checkLoaders;
+    private Map<String, ActionRunner> runners = new HashMap<>();
+    private List<Plan> plans;
 
     @PostConstruct
     public void reload() {
-        checks = new ArrayList<>();
-        map = new HashMap<>();
 
-        for (CheckLoader checkLoader : checkLoaders) {
-            checks.addAll(checkLoader.load());
+        for (ActionRunner actionRunner : actionRunners) {
+            runners.put(actionRunner.getId(), actionRunner);
         }
-        checkRunners.forEach(r -> map.put(r, new ArrayList<>()));
 
-        for (Check check : this.checks) {
-            for (CheckRunner checkRunner : checkRunners) {
-                List<Check> runnerChecks = map.get(checkRunner);
-                if (checkRunner.supports(check)) {
-                    runnerChecks.add(check);
-                    break;
+        PlanLoader planLoader = new FilePlanLoader(new File("plans/check-localhost-ping.json"));
+        planLoader.reload();
+
+        plans = planLoader.getPlans();
+        for (Plan plan : plans) {
+            plan.init();
+        }
+    }
+
+    private Boolean run(Action action) {
+        if (action == null || action.getRunner() == null) {
+            return null;
+        }
+        if (!runners.containsKey(action.getRunner())) {
+            System.out.println("Action not found: " + action.getRunner());
+            return null;
+        }
+        return runners.get(action.getRunner()).run(action);
+    }
+
+    @Scheduled(fixedRate = 1000)
+    public void timer() throws IOException {
+
+        for (Plan plan : plans) {
+            if (plan.shouldRun()) {
+                plan.last(LocalDateTime.now());
+                boolean success = run(plan.getCheck());
+                if (success == true) {
+                    run(plan.getSuccess());
+                } else if (success == false) {
+                    run(plan.getFailure());
                 }
             }
         }
-    }
-
-    @Scheduled(fixedRate = 100)
-    public void timer() throws IOException {
-        map.entrySet().parallelStream()
-                .forEach(entry -> entry.getValue().stream()
-                        .filter(entry.getKey()::shouldRun)
-                        .forEach(entry.getKey()::run));
-    }
-
-    public List<Check> getChecks() {
-        return checks;
     }
 }
