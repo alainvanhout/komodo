@@ -5,6 +5,7 @@ import komodo.actions.runners.ActionRunner;
 import komodo.plans.Plan;
 import komodo.plans.loaders.FilePlanLoader;
 import komodo.plans.loaders.FolderPlanLoader;
+import komodo.plans.loaders.GitRepositoryPlanLoader;
 import komodo.plans.loaders.PlanLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,6 +31,9 @@ public class TimerService {
 
     @PostConstruct
     public void reload() {
+
+        GitRepositoryPlanLoader gitRepositoryPlanLoader = new GitRepositoryPlanLoader();
+        gitRepositoryPlanLoader.reload();
 
         for (ActionRunner actionRunner : actionRunners) {
             runners.put(actionRunner.getId(), actionRunner);

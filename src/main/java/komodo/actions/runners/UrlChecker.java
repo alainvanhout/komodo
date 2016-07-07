@@ -1,16 +1,11 @@
 package komodo.actions.runners;
 
 import komodo.actions.Action;
-import komodo.actions.Context;
-import komodo.domain.Check;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Component;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Component
 public class UrlChecker implements ActionRunner {

@@ -31,9 +31,11 @@ public class FolderPlanLoader implements PlanLoader {
         try {
             Files.walk(Paths.get(folder.getAbsolutePath())).forEach(filePath -> {
                 if (Files.isRegularFile(filePath)) {
-                    FilePlanLoader loader = new FilePlanLoader(filePath.toFile());
-                    loader.reload();
-                    loaders.add(loader);
+                    if (filePath.toFile().getName().endsWith(".json")) {
+                        FilePlanLoader loader = new FilePlanLoader(filePath.toFile());
+                        loader.reload();
+                        loaders.add(loader);
+                    }
                 }
             });
         } catch (IOException e) {
