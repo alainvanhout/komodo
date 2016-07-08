@@ -19,6 +19,8 @@ public class UrlChecker implements ActionRunner {
     public boolean run(Action action) {
         String url = action.get("url");
 
+        System.out.println("url:" + url);
+
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(url).openConnection();

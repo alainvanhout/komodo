@@ -10,4 +10,13 @@ public class PingController {
     public String ping(){
         return "ok";
     }
+
+    @RequestMapping("ping2")
+    public String ping2(){
+        return "ok";
+    }
+    @RequestMapping("ping3")
+    public String ping3(){
+        return "ok";
+    }
 }

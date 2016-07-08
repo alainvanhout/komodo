@@ -68,7 +68,8 @@ public class Action {
             MatchResult matchResult = regexMatcher.toMatchResult();
             String group = matchResult.group();
             String inner = StringUtils.substring(group, 2, group.length() - 1);
-            output = output.replace(group, get(inner));
+            String innerValue = get(inner);
+            output = output.replace(group, innerValue != null ? innerValue : "null");
         }
         return output;
     }
