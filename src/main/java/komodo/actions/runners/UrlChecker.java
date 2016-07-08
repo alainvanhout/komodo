@@ -31,15 +31,15 @@ public class UrlChecker implements ActionRunner {
             int responseCode = connection.getResponseCode();
 //            System.out.println(url + ": " + responseCode + " - " + LocalTime.now());
 
-            action.success(responseCode >= 200 && responseCode < 300);
+            action.getState().setSuccessful(responseCode >= 200 && responseCode < 300);
         } catch (Exception e) {
-            action.success(false);
+            action.getState().setSuccessful(false);
         } finally {
             if (connection != null) {
                 connection.disconnect();
             }
         }
-        return action.getSuccess();
+        return action.getState().getSuccessful();
     }
 
     private void addAuthentication(HttpURLConnection connection, Action action) {
