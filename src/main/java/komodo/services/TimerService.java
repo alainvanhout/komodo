@@ -3,9 +3,7 @@ package komodo.services;
 import komodo.actions.Action;
 import komodo.actions.runners.ActionRunner;
 import komodo.plans.Plan;
-import komodo.plans.loaders.FilePlanLoader;
 import komodo.plans.loaders.FolderPlanLoader;
-import komodo.plans.loaders.GitRepositoryPlanLoader;
 import komodo.plans.loaders.PlanLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,8 +30,8 @@ public class TimerService {
     @PostConstruct
     public void reload() {
 
-        GitRepositoryPlanLoader gitRepositoryPlanLoader = new GitRepositoryPlanLoader();
-        gitRepositoryPlanLoader.reload();
+//        GitRepositoryPlanLoader gitRepositoryPlanLoader = new GitRepositoryPlanLoader();
+//        gitRepositoryPlanLoader.reload();
 
         for (ActionRunner actionRunner : actionRunners) {
             runners.put(actionRunner.getId(), actionRunner);
@@ -46,6 +44,11 @@ public class TimerService {
         for (Plan plan : plans) {
             plan.init();
         }
+    }
+
+    private Boolean run(List<Action> actions) {
+        // todo : replace this AndResultEvaluator to a provided <? implements ResultEvaluator> with this one as default
+        return actions.stream().map(this::run).reduce((a, b) -> a && b).orElse(null);
     }
 
     private Boolean run(Action action) {

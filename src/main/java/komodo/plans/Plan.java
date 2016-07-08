@@ -5,40 +5,42 @@ import komodo.actions.Context;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Plan {
 
     private String name;
 
-    private Action check = new Action();
-    private Action success = new Action();
-    private Action failure = new Action();
+    private List<Action> check = new ArrayList<>();
+    private List<Action> success = new ArrayList<>();
+    private List<Action> failure = new ArrayList<>();
     private Map<String, String> config = new HashMap<>();
 
     private double interval = 60;
     private transient LocalDateTime last;
     private Context context;
 
-    public void init(){
+    public void init() {
         context = new Context();
         config.entrySet().forEach(e -> context.add(e.getKey(), e.getValue()));
 
-        check.context(new Context(context));
-        success.context(new Context(context));
-        failure.context(new Context(context));
+        check.forEach(a -> a.context(new Context(context)));
+        success.forEach(a -> a.context(new Context(context)));
+        failure.forEach(a -> a.context(new Context(context)));
     }
 
-    public Action getCheck() {
+    public List<Action> getCheck() {
         return check;
     }
 
-    public Action getSuccess() {
+    public List<Action> getSuccess() {
         return success;
     }
 
-    public Action getFailure() {
+    public List<Action> getFailure() {
         return failure;
     }
 
