@@ -1,9 +1,51 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
+</head>
 <body>
-    <h1>overview</h1>
+<div class="container">
+    <h1>Overview</h1>
 
-    <p th:each="check : ${checks}" th:text="${check.status}"></p>
+    <div id="accordion" class="panel-group" th:each="plan : ${plans}">
 
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <span data-toggle="collapse" data-parent="#accordion" th:href="'#' + ${plan.name}">
+                        <span th:text="${plan.name}"/>
+                        <span style="float:right">
+                            <span th:if="${plan.state.successful} == true">OK</span>
+                            <span th:if="${plan.state.successful} == false">Failure </span>
+                            <span th:if="${plan.state.successful} == null">?</span>
+                        </span>
+                    </span>
+                </h4>
+            </div>
+            <div th:id="${plan.name}" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div>Actions:
+                        <ul>
+                            <li th:each="action : ${plan.check}">
+                                <span th:text="${action.runner}"/>
+                                <span th:if="${action.state.successful} == true"> OK</span>
+                                <span th:if="${action.state.successful} == false"> Failure </span>
+                                <span th:if="${action.state.successful} == null"> ?</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>Interval: <span th:text="${plan.interval}"/></div>
+                    <div>Last: <span th:text="${plan.state.last}"/></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>

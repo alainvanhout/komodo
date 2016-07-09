@@ -16,7 +16,7 @@ public class OverviewController {
 
     @RequestMapping("overview")
     public String overview(Model model){
-//        model.addAttribute("checks", timerService.getChecks());
+        model.addAttribute("plans", timerService.getPlans());
         return "overview";
     }
 }

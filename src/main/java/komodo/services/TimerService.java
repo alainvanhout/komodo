@@ -33,8 +33,8 @@ public class TimerService {
             runners.put(actionRunner.getId(), actionRunner);
         }
 
-        planLoaders.add(new GitRepositoryPlanLoader("file:///C:/Projects/testrepo"));
-//        planLoaders.add(new FolderPlanLoader(new File("plans/")));
+        //planLoaders.add(new GitRepositoryPlanLoader("file:///C:/Projects/testrepo"));
+        planLoaders.add(new FolderPlanLoader(new File("plans/")));
 
         planLoaders.forEach(PlanLoader::load);
         plans = planLoaders.stream()
@@ -79,5 +79,9 @@ public class TimerService {
             return null;
         }
         return runners.get(action.getRunner()).run(action);
+    }
+
+    public List<Plan> getPlans() {
+        return plans;
     }
 }

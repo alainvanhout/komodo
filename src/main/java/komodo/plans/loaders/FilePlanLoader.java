@@ -28,7 +28,7 @@ public class FilePlanLoader implements PlanLoader {
         try {
             plan = JsonUtil.toObject(IOUtils.toString(new FileInputStream(file)), Plan.class);
             if (StringUtils.isBlank(plan.getName())) {
-                plan.setName(file.getName());
+                plan.setName(StringUtils.substringBeforeLast(file.getName(), ".json"));
             }
         } catch (IOException e) {
             throw new IllegalArgumentException("Could not access file: " + file.getAbsolutePath());

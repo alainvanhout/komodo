@@ -7,13 +7,13 @@ import java.time.LocalDateTime;
 public class State {
 
     private transient LocalDateTime last;
-    private Boolean successful;
+    private boolean successful;
 
-    public Boolean getSuccessful() {
+    public boolean getSuccessful() {
         return successful;
     }
 
-    public void setSuccessful(Boolean successful) {
+    public void setSuccessful(boolean successful) {
         this.successful = successful;
     }
 

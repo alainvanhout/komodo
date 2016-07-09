@@ -14,4 +14,12 @@ public class Plan extends Action {
         LocalDateTime last = getState().getLast();
         return last == null || Duration.between(last, now).toMillis() >= interval * 1000 - 100;
     }
+
+    public double getInterval() {
+        return interval;
+    }
+
+    public void setInterval(double interval) {
+        this.interval = interval;
+    }
 }
