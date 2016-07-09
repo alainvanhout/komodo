@@ -15,6 +15,8 @@ import java.util.List;
 
 public interface PlanLoader {
 
+    void load();
+
     void reload();
 
     List<Plan> getPlans();

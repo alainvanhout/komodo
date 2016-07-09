@@ -7,21 +7,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FolderPlanLoader implements PlanLoader {
 
-    private List<FilePlanLoader> loaders = new ArrayList<>();
     private File folder;
+    private List<FilePlanLoader> loaders = new ArrayList<>();
 
     public FolderPlanLoader(File folder) {
         this.folder = folder;
     }
 
     @Override
-    public void reload() {
+    public void load() {
         if (!folder.exists()) {
             throw new IllegalArgumentException("Folder does not exist: " + folder.getAbsolutePath());
         }
@@ -41,6 +40,12 @@ public class FolderPlanLoader implements PlanLoader {
         } catch (IOException e) {
             throw new IllegalArgumentException("Encountered error while walking folder: " + folder.getAbsolutePath());
         }
+    }
+
+    @Override
+    public void reload() {
+        loaders = new ArrayList<>();
+        load();
     }
 
     @Override
