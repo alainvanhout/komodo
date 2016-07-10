@@ -5,7 +5,8 @@ import komodo.services.RunnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 
 @Component
 public class SuccessRunner implements ActionRunner {
@@ -16,6 +17,11 @@ public class SuccessRunner implements ActionRunner {
     @Override
     public String getId() {
         return Runners.SUCCESS_RUNNER;
+    }
+
+    @Override
+    public Map<String, String> getParameters(){
+        return Collections.emptyMap();
     }
 
     @Override

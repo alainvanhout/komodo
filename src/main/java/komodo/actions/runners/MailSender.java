@@ -1,18 +1,23 @@
 package komodo.actions.runners;
 
 import komodo.actions.Action;
-import komodo.actions.Context;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class MailSender implements ActionRunner {
+
+    public static final String HOST = "host";
+    public static final String PORT = "port";
+    public static final String TO = "to";
+    public static final String SUBJECT = "subject";
+    public static final String TEXT = "text";
 
     @Override
     public String getId() {
@@ -20,14 +25,24 @@ public class MailSender implements ActionRunner {
     }
 
     @Override
+    public Map<String, String> getParameters(){
+        Map<String, String> map = new HashMap();
+        map.put(HOST, "The mail server host");
+        map.put(PORT, "The mail server port");
+        map.put(TO, "A comma-separated list of email addresses");
+        map.put(SUBJECT, "The e-mail subject");
+        map.put(TEXT, "The e-mail body text");
+        return map;
+    }
+
+    @Override
     public Boolean run(Action action) {
         try {
-            String host = action.get("host");
-            String to = action.get("to");
-            String subject = action.get("subject");
-            String text = action.get("text");
+            String to = action.get(TO);
+            String subject = action.get(SUBJECT);
+            String text = action.get(TEXT);
 
-            JavaMailSenderImpl sender = createSender(action, host);
+            JavaMailSenderImpl sender = createSender(action);
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
 
@@ -42,10 +57,10 @@ public class MailSender implements ActionRunner {
         }
     }
 
-    private JavaMailSenderImpl createSender(Action action, String host) {
+    private JavaMailSenderImpl createSender(Action action) {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setHost(host);
-        sender.setPort(Integer.parseInt(action.get("port")));
+        sender.setHost(action.get(HOST));
+        sender.setPort(Integer.parseInt(action.get(PORT)));
         return sender;
     }
 }

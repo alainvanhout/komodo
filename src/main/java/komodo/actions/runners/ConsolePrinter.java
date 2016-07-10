@@ -4,9 +4,14 @@ import komodo.actions.Action;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ConsolePrinter implements ActionRunner {
+
+    public static final String MESSAGE = "message";
 
     @Override
     public String getId() {
@@ -14,8 +19,15 @@ public class ConsolePrinter implements ActionRunner {
     }
 
     @Override
+    public Map<String, String> getParameters(){
+        Map<String, String> map = new HashMap();
+        map.put(MESSAGE, "The message to be printed to console");
+        return map;
+    }
+
+    @Override
     public Boolean run(Action action) {
-        System.out.println(LocalTime.now() + " " + action.get("message"));
+        System.out.println(LocalTime.now() + " " + action.get(MESSAGE));
         // inherently always succeeds
         return true;
     }

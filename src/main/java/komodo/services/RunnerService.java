@@ -51,7 +51,9 @@ public class RunnerService {
         if (namedActions.containsKey(action.getRunner())) {
             Action namedAction = namedActions.get(action.getRunner());
             namedAction.getContext().setParent(action.getContext());
-            return run(namedAction);
+            Boolean success = run(namedAction);
+            namedAction.getContext().setParent(null);
+            return success;
         }
 
         if (!runners.containsKey(action.getRunner())) {
@@ -72,5 +74,13 @@ public class RunnerService {
         }
 
         return success;
+    }
+
+    public Map<String, Action> getNamedActions() {
+        return namedActions;
+    }
+
+    public Map<String, ActionRunner> getRunners() {
+        return runners;
     }
 }

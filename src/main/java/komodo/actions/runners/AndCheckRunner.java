@@ -5,8 +5,7 @@ import komodo.services.RunnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalTime;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class AndCheckRunner implements ActionRunner {
@@ -17,6 +16,12 @@ public class AndCheckRunner implements ActionRunner {
     @Override
     public String getId() {
         return  Runners.AND_CHECK_RUNNER;
+    }
+
+
+    @Override
+    public Map<String, String> getParameters(){
+        return Collections.emptyMap();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package komodo.actions;
 
+import komodo.actions.runners.Runners;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -12,14 +13,14 @@ import java.util.regex.Pattern;
 
 public class Action {
     private String name;
-    private String runner = "and-check-runner";
+    private String runner = Runners.AND_CHECK_RUNNER;
 
     private List<Action> check = new ArrayList<>();
     private List<Action> success = new ArrayList<>();
     private List<Action> failure = new ArrayList<>();
 
     private Map<String, String> config = new HashMap<>();
-    private Context context;
+    private transient Context context;
 
     private State state = new State();
 
