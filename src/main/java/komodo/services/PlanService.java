@@ -15,34 +15,42 @@ import java.util.stream.Collectors;
 @Service
 public class PlanService {
 
-    private List<PlanLoader> planLoaders = new ArrayList<>();
-    private List<Plan> plans;
+    private List<PlanLoader> loaders = new ArrayList<>();
 
     @PostConstruct
     public void load() {
-        //planLoaders.add(new GitRepositoryPlanLoader("file:///C:/Projects/testrepo"));
-        planLoaders.add(new FolderPlanLoader(new File("plans/")));
-
-        planLoaders.forEach(PlanLoader::load);
-        plans = planLoaders.stream()
-                .flatMap(p -> p.getPlans().stream())
-                .collect(Collectors.toList());
+        setupDefaultLoaders();
 
         Context context = new Context();
-        plans.forEach(p -> p.init(context));
+
+        loaders.forEach(PlanLoader::load);
+        loaders.stream()
+                .flatMap(p -> p.getPlans().stream())
+                .peek(p -> p.init(context))
+                .collect(Collectors.toList());
+    }
+
+    private void setupDefaultLoaders() {
+//        loaders.add(new GitRepositoryPlanLoader("file:///C:/Projects/testrepo"));
+        File folder = new File("plans/");
+        if (folder.exists()) {
+            loaders.add(new FolderPlanLoader(folder));
+        }
     }
 
     public void reload() {
-        planLoaders.forEach(PlanLoader::reload);
-        plans = planLoaders.stream()
-                .flatMap(p -> p.getPlans().stream())
-                .collect(Collectors.toList());
-
+        loaders.forEach(PlanLoader::reload);
         Context context = new Context();
-        plans.forEach(p -> p.init(context));
+        getPlans().forEach(p -> p.init(context));
     }
 
     public List<Plan> getPlans() {
-        return plans;
+        return loaders.stream()
+                .flatMap(p -> p.getPlans().stream())
+                .collect(Collectors.toList());
+    }
+
+    public List<PlanLoader> getLoaders() {
+        return loaders;
     }
 }

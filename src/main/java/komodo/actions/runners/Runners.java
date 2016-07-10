@@ -10,4 +10,5 @@ public interface Runners {
     String PRINT_TO_CONSOLE = "print-to-console";
     String SEND_MAIL = "send-mail";
     String URL_CHECK = "url-check";
+    String GIT_PULL_ALL = "git-pull-all";
 }

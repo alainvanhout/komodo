@@ -25,13 +25,17 @@ public class FilePlanLoader implements PlanLoader {
         if (!file.exists()) {
             throw new IllegalArgumentException("File does not exist: " + file.getAbsolutePath());
         }
+        FileInputStream input = null;
         try {
-            plan = JsonUtil.toObject(IOUtils.toString(new FileInputStream(file)), Plan.class);
+            input = new FileInputStream(file);
+            plan = JsonUtil.toObject(IOUtils.toString(input), Plan.class);
             if (StringUtils.isBlank(plan.getName())) {
                 plan.setName(StringUtils.substringBeforeLast(file.getName(), ".json"));
             }
         } catch (IOException e) {
             throw new IllegalArgumentException("Could not access file: " + file.getAbsolutePath());
+        } finally {
+            IOUtils.closeQuietly(input);
         }
     }
 

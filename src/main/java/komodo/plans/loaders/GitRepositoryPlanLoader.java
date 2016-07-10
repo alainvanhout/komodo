@@ -6,7 +6,6 @@ import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.transport.FetchResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +17,7 @@ public class GitRepositoryPlanLoader implements PlanLoader {
     private final String remotePath;
     private Git git = null;
     private FolderPlanLoader folderPlanLoader = null;
+    private FileRepository localRepo;
 
     public GitRepositoryPlanLoader(String remotePath) {
         this.remotePath = remotePath;
@@ -28,15 +28,20 @@ public class GitRepositoryPlanLoader implements PlanLoader {
         try {
             File localFolder = Files.createTempDirectory(new File("").toPath(), "").toFile();
             String localPath = localFolder.getAbsolutePath();
-            Git.cloneRepository()
+            Git git = Git.cloneRepository()
                     .setURI(remotePath)
                     .setDirectory(new File(localPath))
                     .call();
 
-            FileRepository localRepo = new FileRepository(localPath + "/.git");
-            git = new Git(localRepo);
 
-            git.pull().call();
+            localRepo = new FileRepository(localPath + "/.git");
+            this.git = new Git(localRepo);
+
+            this.git.pull().call();
+            this.git.close();
+
+            git.reset();
+            git.close();
 
             folderPlanLoader = new FolderPlanLoader(localFolder);
             folderPlanLoader.reload();
@@ -69,11 +74,14 @@ public class GitRepositoryPlanLoader implements PlanLoader {
     @Override
     public void reload() {
         try {
-            git.pull().call();
+            git = new Git(localRepo);
+            PullResult pull = git.pull().call();
+            if (pull.getMergeResult().getMergeStatus().equals(MergeResult.MergeStatus.FAST_FORWARD)) {
+                folderPlanLoader.reload();
+            }
         } catch (GitAPIException e) {
             throw new RuntimeException(e);
         }
-        folderPlanLoader.reload();
     }
 
     @Override
