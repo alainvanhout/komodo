@@ -1,12 +1,16 @@
 package komodo.services;
 
 import komodo.actions.Action;
+import komodo.actions.Context;
 import komodo.actions.runners.ActionRunner;
 import komodo.actions.runners.Runners;
+import komodo.plans.loaders.FolderPlanLoader;
+import komodo.plans.loaders.PlanLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,11 +23,20 @@ public class RunnerService {
     private Collection<ActionRunner> actionRunners;
 
     private Map<String, ActionRunner> runners = new HashMap<>();
+    private Map<String, Action> namedActions = new HashMap<>();
 
     @PostConstruct
     public void load() {
         for (ActionRunner actionRunner : actionRunners) {
             runners.put(actionRunner.getId(), actionRunner);
+        }
+
+        PlanLoader namedActionsLoader = new FolderPlanLoader(new File("named actions/"));
+        namedActionsLoader.load();
+        Context context = new Context();
+        for (Action action : namedActionsLoader.getPlans()) {
+            action.init(context);
+            namedActions.put(action.getName(), action);
         }
     }
 
@@ -35,6 +48,12 @@ public class RunnerService {
     }
 
     public Boolean run(Action action, String runner) {
+        if (namedActions.containsKey(action.getRunner())) {
+            Action namedAction = namedActions.get(action.getRunner());
+            namedAction.getContext().setParent(action.getContext());
+            return run(namedAction);
+        }
+
         if (!runners.containsKey(action.getRunner())) {
             throw new RuntimeException("Runner not found: " + action.getRunner());
         }

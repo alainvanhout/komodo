@@ -33,4 +33,8 @@ public class Context {
         map.put(key, value);
         return this;
     }
+
+    public void setParent(Context parent) {
+        this.parent = parent;
+    }
 }
