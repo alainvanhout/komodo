@@ -10,12 +10,13 @@ public class ConsolePrinter implements ActionRunner {
 
     @Override
     public String getId() {
-        return "print-to-console";
+        return Runners.PRINT_TO_CONSOLE;
     }
 
     @Override
-    public boolean run(Action action) {
+    public Boolean run(Action action) {
         System.out.println(LocalTime.now() + " " + action.get("message"));
+        // inherently always succeeds
         return true;
     }
 }

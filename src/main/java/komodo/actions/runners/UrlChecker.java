@@ -12,11 +12,11 @@ public class UrlChecker implements ActionRunner {
 
     @Override
     public String getId() {
-        return "url-check";
+        return Runners.URL_CHECK;
     }
 
     @Override
-    public boolean run(Action action) {
+    public Boolean run(Action action) {
         String url = action.get("url");
 
         System.out.println("url:" + url);

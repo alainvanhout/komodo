@@ -1,5 +1,6 @@
 package komodo.controllers;
 
+import komodo.services.PlanService;
 import komodo.services.TimerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +13,13 @@ public class ReloadController {
     @Autowired
     private TimerService timerService;
 
+    @Autowired
+    private PlanService planService;
+
     @RequestMapping("reload")
     public String reload(){
-        timerService.reload();
+        planService.reload();
+        timerService.timer();
         return "redirect:/overview";
     }
 }

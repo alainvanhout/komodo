@@ -1,10 +1,11 @@
 package komodo.actions.runners;
 
 import komodo.actions.Action;
+import komodo.services.RunnerService;
 
 public interface ActionRunner {
 
     String getId();
 
-    boolean run(Action action);
+    Boolean run(Action action);
 }

@@ -2,6 +2,7 @@ package komodo.actions.runners;
 
 import komodo.actions.Action;
 import komodo.actions.Context;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -15,11 +16,11 @@ public class MailSender implements ActionRunner {
 
     @Override
     public String getId() {
-        return "send-mail";
+        return Runners.SEND_MAIL;
     }
 
     @Override
-    public boolean run(Action action) {
+    public Boolean run(Action action) {
         try {
             String host = action.get("host");
             String to = action.get("to");
@@ -36,8 +37,7 @@ public class MailSender implements ActionRunner {
 
             sender.send(message);
             return true;
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return false;
         }
     }

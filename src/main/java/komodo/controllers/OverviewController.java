@@ -1,5 +1,6 @@
 package komodo.controllers;
 
+import komodo.services.PlanService;
 import komodo.services.TimerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class OverviewController {
 
     @Autowired
-    private TimerService timerService;
+    private PlanService planService;
 
     @RequestMapping("overview")
     public String overview(Model model){
-        model.addAttribute("plans", timerService.getPlans());
+        model.addAttribute("plans", planService.getPlans());
         return "overview";
     }
 }

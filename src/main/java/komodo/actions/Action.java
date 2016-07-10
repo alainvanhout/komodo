@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class Action {
     private String name;
-    private String runner;
+    private String runner = "and-check-runner";
 
     private List<Action> check = new ArrayList<>();
     private List<Action> success = new ArrayList<>();
@@ -27,13 +27,13 @@ public class Action {
         return runner;
     }
 
-    public void init() {
-        context = new Context();
+    public void init(Context context) {
+        this.context = new Context(context);
         config.entrySet().forEach(e -> context.add(e.getKey(), e.getValue()));
 
-        getCheck().forEach(a -> a.context(new Context(context)));
-        success.forEach(a -> a.context(new Context(context)));
-        getFailure().forEach(a -> a.context(new Context(context)));
+        check.forEach(a -> a.init(this.context));
+        success.forEach(a -> a.init(this.context));
+        failure.forEach(a -> a.init(this.context));
     }
 
     public Action runnerId(String actionId) {
