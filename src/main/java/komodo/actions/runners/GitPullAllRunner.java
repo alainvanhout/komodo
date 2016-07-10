@@ -29,12 +29,16 @@ public class GitPullAllRunner implements ActionRunner {
 
     @Override
     public Boolean run(Action action) {
-        List<PlanLoader> loaders = planService.getLoaders();
-        for (PlanLoader loader : loaders) {
-            if (loader instanceof GitRepositoryPlanLoader) {
-                loader.reload();
+        try {
+            List<PlanLoader> loaders = planService.getLoaders();
+            for (PlanLoader loader : loaders) {
+                if (loader instanceof GitRepositoryPlanLoader) {
+                    loader.reload();
+                }
             }
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        return true;
     }
 }
