@@ -1,5 +1,6 @@
 package komodo.services;
 
+import komodo.actions.Action;
 import komodo.actions.Context;
 import komodo.plans.Plan;
 import komodo.plans.loaders.FolderPlanLoader;
@@ -17,17 +18,12 @@ public class PlanService {
 
     private List<PlanLoader> loaders = new ArrayList<>();
 
+    private Action configAction = new Action();
+
     @PostConstruct
     public void load() {
         setupDefaultLoaders();
-
-        Context context = new Context();
-
-        loaders.forEach(PlanLoader::load);
-        loaders.stream()
-                .flatMap(p -> p.getPlans().stream())
-                .peek(p -> p.init(context))
-                .collect(Collectors.toList());
+        reload();
     }
 
     private void setupDefaultLoaders() {
@@ -40,8 +36,7 @@ public class PlanService {
 
     public void reload() {
         loaders.forEach(PlanLoader::reload);
-        Context context = new Context();
-        getPlans().forEach(p -> p.init(context));
+        getPlans().forEach(p -> p.init(configAction));
     }
 
     public List<Plan> getPlans() {

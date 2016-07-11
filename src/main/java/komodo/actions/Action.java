@@ -14,27 +14,25 @@ import java.util.regex.Pattern;
 public class Action {
     private String name;
     private String runner = Runners.AND_CHECK_RUNNER;
-
     private List<Action> check = new ArrayList<>();
+
     private List<Action> success = new ArrayList<>();
     private List<Action> failure = new ArrayList<>();
-
     private Map<String, String> config = new HashMap<>();
-    private transient Context context;
 
-    private State state = new State();
+    private transient Action parent;
+    private transient Context context =  new Context();
+    private transient State state = new State();
 
     public String getRunner() {
         return runner;
     }
 
-    public void init(Context context) {
-        this.context = new Context(context);
-        config.entrySet().forEach(e -> context.add(e.getKey(), e.getValue()));
-
-        check.forEach(a -> a.init(this.context));
-        success.forEach(a -> a.init(this.context));
-        failure.forEach(a -> a.init(this.context));
+    public void init(Action parent) {
+        this.parent = parent;
+        check.forEach(a -> a.init(this));
+        success.forEach(a -> a.init(this));
+        failure.forEach(a -> a.init(this));
     }
 
     public Action runnerId(String actionId) {
@@ -43,10 +41,29 @@ public class Action {
     }
 
     public String get(String key) {
-        if (config != null && config.containsKey(key)) {
-            return interpret(config.get(key));
+        return get(key, null);
+    }
+
+    public String get(String key, String defaultValue) {
+        String value = getValue(key, defaultValue);
+        return interpret(value);
+    }
+
+    private String getValue(String key, String defaultValue) {
+        String value = null;
+        // first check config
+        if (config.containsKey(key)) {
+            value = config.get(key);
         }
-        return interpret(context.get(key));
+        // then ask parent
+        if (value == null && parent != null){
+            value = parent.get(key, defaultValue);
+        }
+        // fallback on default
+        if (value == null){
+            value = defaultValue;
+        }
+        return value;
     }
 
     private String interpret(String input) {
@@ -102,5 +119,10 @@ public class Action {
 
     public State getState() {
         return state;
+    }
+
+    public Action parent(Action parent) {
+        this.parent = parent;
+        return this;
     }
 }

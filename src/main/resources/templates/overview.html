@@ -36,7 +36,27 @@
             </div>
             <div th:id="${plan.name}" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <div>Actions:
+                    <div>
+                        <div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <th>Config key</th>
+                                    <th>Raw value</th>
+                                    <th>Interpreted value</th>
+                                </thead>
+                                <tbody>
+                                <tr th:each="configEntry : ${plan.config}">
+                                    <td th:text="${configEntry.key}"></td>
+                                    <td th:text="${configEntry.value}"></td>
+                                    <td th:text="${plan.get(configEntry.key)}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div>
+                        <div>Actions:</div>
                         <ul>
                             <li th:each="action : ${plan.check}">
                                 <span th:text="${action.runner}"/>
@@ -46,8 +66,10 @@
                             </li>
                         </ul>
                     </div>
-                    <div>Interval: <span th:text="${plan.interval}"/></div>
-                    <div>Last: <span th:text="${plan.state.last}"/></div>
+                    <div>
+                        <div>Interval: <span th:text="${plan.interval}"/></div>
+                        <div>Last: <span th:text="${plan.state.last}"/></div>
+                    </div>
                 </div>
             </div>
         </div>

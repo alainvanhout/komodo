@@ -33,9 +33,7 @@ public class RunnerService {
 
         PlanLoader namedActionsLoader = new FolderPlanLoader(new File("named actions/"));
         namedActionsLoader.load();
-        Context context = new Context();
         for (Action action : namedActionsLoader.getPlans()) {
-            action.init(context);
             namedActions.put(action.getName(), action);
         }
     }
@@ -43,16 +41,15 @@ public class RunnerService {
     public Boolean run(Action action) {
         boolean success = run(action, action.getRunner());
         action.getState().setSuccessful(success);
-
         return success;
     }
 
     public Boolean run(Action action, String runner) {
         if (namedActions.containsKey(action.getRunner())) {
             Action namedAction = namedActions.get(action.getRunner());
-            namedAction.getContext().setParent(action.getContext());
+            namedAction.parent(action);
             Boolean success = run(namedAction);
-            namedAction.getContext().setParent(null);
+            namedAction.parent(null);
             return success;
         }
 

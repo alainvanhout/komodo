@@ -16,6 +16,10 @@ public class UrlChecker implements ActionRunner {
     public static final String URL = "url";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String METHOD = "method";
+    public static final String METHOD_DEFAULT = "GET";
+    public static final String TIMEOUT = "timeout";
+    public static final String TIMEOUT_DEFAULT = "1000";
 
     @Override
     public String getId() {
@@ -26,6 +30,8 @@ public class UrlChecker implements ActionRunner {
     public Map<String, String> getParameters(){
         Map<String, String> map = new HashMap();
         map.put(URL, "The url to be checked");
+        map.put(METHOD, "HTTP method/verb (default: " + METHOD_DEFAULT + ")");
+        map.put(TIMEOUT, "Connection timeout(default: " + TIMEOUT_DEFAULT + ")");
         map.put(USERNAME, "Basic authentication username (optional)");
         map.put(PASSWORD, "Basic authentication password (optional)");
         return map;
@@ -34,11 +40,14 @@ public class UrlChecker implements ActionRunner {
     @Override
     public Boolean run(Action action) {
         String url = action.get(URL);
+        String method = action.get(METHOD, METHOD_DEFAULT);
+        int timeout = Integer.parseInt(action.get(TIMEOUT, TIMEOUT_DEFAULT));
 
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod(method);
+            connection.setConnectTimeout(timeout);
 
             addAuthentication(connection, action);
             int responseCode = connection.getResponseCode();
