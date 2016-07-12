@@ -17,7 +17,6 @@ public class State {
         this.successful = successful;
     }
 
-
     public LocalDateTime getLast() {
         return last;
     }

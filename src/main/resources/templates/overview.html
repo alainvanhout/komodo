@@ -22,7 +22,7 @@
                 <h4 class="panel-title">
                     <span data-toggle="collapse" data-parent="#accordion" th:href="'#' + ${plan.name}">
                         <span th:text="${plan.name}"/>
-                        <span style="float:right">
+                        <span style="float:left; padding-right:15px">
                             <span th:if="${plan.state.successful} == true">
                                 <span style="color:green" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                             </span>
@@ -31,6 +31,7 @@
                              </span>
                             <span th:if="${plan.state.successful} == null">?</span>
                         </span>
+                        <span th:unless="${plan.state.last} == null" style="float:right"><span th:text="${#temporals.format(plan.state.getLast(), 'yyyy-MM-dd HH:mm:ss')}"/></span>
                     </span>
                 </h4>
             </div>
@@ -68,7 +69,6 @@
                     </div>
                     <div>
                         <div>Interval: <span th:text="${plan.interval}"/></div>
-                        <div>Last: <span th:text="${plan.state.last}"/></div>
                     </div>
                 </div>
             </div>
