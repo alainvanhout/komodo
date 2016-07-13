@@ -5,6 +5,7 @@ import komodo.actions.Context;
 import komodo.plans.Plan;
 import komodo.plans.loaders.FolderPlanLoader;
 import komodo.plans.loaders.PlanLoader;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -16,8 +17,10 @@ import java.util.stream.Collectors;
 @Service
 public class PlanService {
 
-    private List<PlanLoader> loaders = new ArrayList<>();
+    @Value("${komodo.init.plans:plans/}")
+    private String planPath;
 
+    private List<PlanLoader> loaders = new ArrayList<>();
     private Action configAction = new Action();
 
     @PostConstruct
@@ -28,7 +31,7 @@ public class PlanService {
 
     private void setupDefaultLoaders() {
 //        loaders.add(new GitRepositoryPlanLoader("file:///C:/Projects/testrepo"));
-        File folder = new File("plans/");
+        File folder = new File(planPath);
         if (folder.exists()) {
             loaders.add(new FolderPlanLoader(folder));
         }

@@ -1,6 +1,7 @@
 package komodo.actions.runners;
 
 import komodo.actions.Action;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,21 @@ public class MailSender implements ActionRunner {
     public static final String SUBJECT = "subject";
     public static final String TEXT = "text";
 
+    @Value("${komodo.defaults.mailsender.host:localhost}")
+    private String defaultHost;
+
+    @Value("${komodo.defaults.mailsender.port:}")
+    private String defaultPort;
+
+    @Value("${komodo.defaults.mailsender.to:}")
+    private String defaultTo;
+
+    @Value("${komodo.defaults.mailsender.subject:}")
+    private String defaultSubject;
+
+    @Value("${komodo.defaults.mailsender.text:}")
+    private String defaultText;
+
     @Override
     public String getId() {
         return Runners.SEND_MAIL;
@@ -27,20 +43,20 @@ public class MailSender implements ActionRunner {
     @Override
     public Map<String, String> getParameters(){
         Map<String, String> map = new HashMap();
-        map.put(HOST, "The mail server host");
-        map.put(PORT, "The mail server port");
-        map.put(TO, "A comma-separated list of email addresses");
-        map.put(SUBJECT, "The e-mail subject");
-        map.put(TEXT, "The e-mail body text");
+        map.put(HOST, "The mail server host (default:" + defaultHost + ")");
+        map.put(PORT, "The mail server port (default:" + defaultPort + ")");
+        map.put(TO, "A comma-separated list of email addresses (default:" + defaultTo + ")");;
+        map.put(SUBJECT, "The e-mail subject (default:" + defaultSubject + ")");
+        map.put(TEXT, "The e-mail body text (default:" + defaultText + ")");
         return map;
     }
 
     @Override
     public Boolean run(Action action) {
         try {
-            String to = action.get(TO);
-            String subject = action.get(SUBJECT);
-            String text = action.get(TEXT);
+            String to = action.get(TO, defaultTo);
+            String subject = action.get(SUBJECT, defaultSubject);
+            String text = action.get(TEXT, defaultText);
 
             JavaMailSenderImpl sender = createSender(action);
             MimeMessage message = sender.createMimeMessage();
@@ -59,8 +75,8 @@ public class MailSender implements ActionRunner {
 
     private JavaMailSenderImpl createSender(Action action) {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setHost(action.get(HOST));
-        sender.setPort(Integer.parseInt(action.get(PORT)));
+        sender.setHost(action.get(HOST, defaultHost));
+        sender.setPort(Integer.parseInt(action.get(PORT, defaultPort)));
         return sender;
     }
 }

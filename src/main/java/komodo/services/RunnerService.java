@@ -7,6 +7,7 @@ import komodo.actions.runners.Runners;
 import komodo.plans.loaders.FolderPlanLoader;
 import komodo.plans.loaders.PlanLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,9 @@ public class RunnerService {
     @Autowired
     private Collection<ActionRunner> actionRunners;
 
+    @Value("${komodo.init.namedactions:named-actions/}")
+    private String namedActionsPath;
+
     private Map<String, ActionRunner> runners = new HashMap<>();
     private Map<String, Action> namedActions = new HashMap<>();
 
@@ -31,10 +35,13 @@ public class RunnerService {
             runners.put(actionRunner.getId(), actionRunner);
         }
 
-        PlanLoader namedActionsLoader = new FolderPlanLoader(new File("named actions/"));
-        namedActionsLoader.load();
-        for (Action action : namedActionsLoader.getPlans()) {
-            namedActions.put(action.getName(), action);
+        File folder = new File(namedActionsPath);
+        if (folder.exists()){
+            PlanLoader namedActionsLoader = new FolderPlanLoader(folder);
+            namedActionsLoader.load();
+            for (Action action : namedActionsLoader.getPlans()) {
+                namedActions.put(action.getName(), action);
+            }
         }
     }
 
