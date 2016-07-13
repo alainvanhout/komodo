@@ -35,11 +35,6 @@ public class Action {
         failure.forEach(a -> a.init(this));
     }
 
-    public Action runnerId(String actionId) {
-        this.runner = actionId;
-        return this;
-    }
-
     public String get(String key) {
         return get(key, null);
     }

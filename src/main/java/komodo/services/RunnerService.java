@@ -1,7 +1,7 @@
 package komodo.services;
 
 import komodo.actions.Action;
-import komodo.actions.Context;
+import komodo.actions.CombinedAction;
 import komodo.actions.runners.ActionRunner;
 import komodo.actions.runners.Runners;
 import komodo.plans.loaders.FolderPlanLoader;
@@ -47,10 +47,8 @@ public class RunnerService {
     public Boolean run(Action action, String runner) {
         if (namedActions.containsKey(action.getRunner())) {
             Action namedAction = namedActions.get(action.getRunner());
-            namedAction.parent(action);
-            Boolean success = run(namedAction);
-            namedAction.parent(null);
-            return success;
+            Action combinedAction = new CombinedAction(namedAction, action);
+            return run(combinedAction);
         }
 
         if (!runners.containsKey(action.getRunner())) {
