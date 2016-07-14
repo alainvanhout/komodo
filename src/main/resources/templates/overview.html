@@ -41,7 +41,10 @@
                                 <span style="color:grey" class="glyphicon glyphicon-pause" aria-hidden="true"></span>
                             </div>
                         </span>
-                        <span th:unless="${plan.state.last} == null" style="float:right"><span th:text="${#temporals.format(plan.state.getLast(), 'yyyy-MM-dd HH:mm:ss')}"/></span>
+                        <span th:unless="${plan.state.last} == null" style="float:right">
+                            <small style="margin-right:10px" th:text="${#temporals.format(plan.state.getLast(), 'yyyy-MM-dd')}"/>
+                            <span th:text="${#temporals.format(plan.state.getLast(), 'HH:mm:ss')}"/>
+                        </span>
                     </span>
                 </h4>
             </div>
