@@ -19,7 +19,7 @@ public class TimerService {
     public void timer() {
         for (Plan plan : planService.getPlans()) {
             if (plan.shouldRun()) {
-//                runnerService.run(new CombinedAction(plan, planService.getConfigAction()), null);
+                runnerService.run(new CombinedAction(plan, planService.getConfigAction()), null);
             }
         }
     }
