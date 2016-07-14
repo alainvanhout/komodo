@@ -26,7 +26,7 @@ public class SuccessRunner implements ActionRunner {
 
     @Override
     public Boolean run(Action action) {
-        action.getSuccess().forEach(runnerService::run);
+        action.getSuccess().forEach((a) -> runnerService.run(a, action));
         // should not trigger success or failure
         return null;
     }

@@ -1,6 +1,7 @@
 package komodo.actions.runners;
 
 import komodo.actions.Action;
+import komodo.actions.CombinedAction;
 import komodo.services.RunnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class AndCheckRunner implements ActionRunner {
     public Boolean run(Action action) {
         List<Action> actions = action.getCheck();
         return actions.stream()
-                .map(runnerService::run)
+                .map((a) -> runnerService.run(new CombinedAction(a, action), null))
                 .reduce((a, b) -> a && b)
                 .orElse(false);
     }

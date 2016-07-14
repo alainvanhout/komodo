@@ -40,38 +40,45 @@ public class RunnerService {
             PlanLoader namedActionsLoader = new FolderPlanLoader(folder);
             namedActionsLoader.load();
             for (Action action : namedActionsLoader.getPlans()) {
+                action.init(null);
                 namedActions.put(action.getName(), action);
             }
         }
     }
 
-    public Boolean run(Action action) {
-        boolean success = run(action, action.getRunner());
+    public Boolean run(Action action, Action caller) {
+        boolean success = run(action, caller, action.getRunner());
         action.getState().setSuccessful(success);
         return success;
     }
 
-    public Boolean run(Action action, String runner) {
-        if (namedActions.containsKey(action.getRunner())) {
-            Action namedAction = namedActions.get(action.getRunner());
-            Action combinedAction = new CombinedAction(namedAction, action);
-            return run(combinedAction);
+    public Boolean run(Action action, Action caller, String runner) {
+
+        Action runnerAction = action;
+
+        if (caller != null){
+            runnerAction = new CombinedAction(action, caller);
         }
 
-        if (!runners.containsKey(action.getRunner())) {
-            throw new RuntimeException("Runner not found: " + action.getRunner());
+        if (namedActions.containsKey(runnerAction.getRunner())) {
+            Action namedAction = namedActions.get(runnerAction.getRunner());
+            return run(new CombinedAction(namedAction, runnerAction), null);
         }
 
-        action.getState().setLast(LocalDateTime.now());
-        Boolean success = runners.get(runner).run(action);
+        if (!runners.containsKey(runnerAction.getRunner())) {
+            throw new RuntimeException("Runner not found: " + runnerAction.getRunner());
+        }
+
+        runnerAction.getState().setLast(LocalDateTime.now());
+        Boolean success = runners.get(runner).run(runnerAction);
 
         // handle success or failure
         // but ignore when null
         if (success != null) {
             if (success == true) {
-                run(action, Runners.SUCCESS_RUNNER);
+                run(action, null, Runners.SUCCESS_RUNNER);
             } else if (success == false) {
-                run(action, Runners.FAILURE_RUNNER);
+                run(action, null, Runners.FAILURE_RUNNER);
             }
         }
 

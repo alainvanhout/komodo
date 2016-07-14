@@ -1,22 +1,20 @@
 package komodo.actions;
 
-import komodo.actions.runners.Runners;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+/**
+ * The first first (runner) action provides the runner id and config, while the second (config) action only provides
+ * config information (which the runner also provides, with the runner action taking precedence)
+ */
 public class CombinedAction extends Action {
 
     private Action runnerAction;
     private Action configAction;
 
     public CombinedAction(Action runnerAction, Action configAction) {
+        // set to ensure that it errors when this action is actually asked to be run
+        super.setRunner("combined-action");
         this.runnerAction = runnerAction;
         this.configAction = configAction;
     }
@@ -32,15 +30,26 @@ public class CombinedAction extends Action {
     }
 
     @Override
+    public String get(String key, Action root) {
+        return get(key, null, root);
+    }
+
+    @Override
     public String get(String key) {
-        return get(key, null);
+        return get(key, null, this);
     }
 
     @Override
     public String get(String key, String defaultValue) {
-        String value = runnerAction.get(key);
-        if (value == null){
-            value = configAction.get(key, defaultValue);
+        String value = getValue(key, defaultValue, this);
+        return interpret(value, this);
+    }
+
+    @Override
+    public String get(String key, String defaultValue, Action root) {
+        String value = runnerAction.get(key, root);
+        if (value == null) {
+            value = configAction.get(key, defaultValue, root);
         }
         return value;
     }
@@ -72,6 +81,11 @@ public class CombinedAction extends Action {
 
     @Override
     public void setConfig(Map<String, String> config) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setRunner(String runner) {
         throw new UnsupportedOperationException();
     }
 

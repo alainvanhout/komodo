@@ -36,15 +36,24 @@ public class Action {
     }
 
     public String get(String key) {
-        return get(key, null);
+        return get(key, null, this);
+    }
+
+    public String get(String key, Action root) {
+        return get(key, null, root);
     }
 
     public String get(String key, String defaultValue) {
-        String value = getValue(key, defaultValue);
-        return interpret(value);
+        String value = getValue(key, defaultValue, this);
+        return interpret(value, this);
     }
 
-    private String getValue(String key, String defaultValue) {
+    public String get(String key, String defaultValue, Action root) {
+        String value = getValue(key, defaultValue, root);
+        return interpret(value, root);
+    }
+
+    protected String getValue(String key, String defaultValue, Action root) {
         String value = null;
         // first check config
         if (config.containsKey(key)) {
@@ -52,7 +61,7 @@ public class Action {
         }
         // then ask parent
         if (value == null && parent != null){
-            value = parent.get(key, defaultValue);
+            value = parent.get(key, defaultValue, root);
         }
         // fallback on default
         if (value == null){
@@ -61,7 +70,7 @@ public class Action {
         return value;
     }
 
-    private String interpret(String input) {
+    protected String interpret(String input, Action root) {
         Pattern regex = Pattern.compile("(\\$\\{[^\\{]*\\})");
         Matcher regexMatcher = regex.matcher(StringUtils.defaultIfEmpty(input, ""));
         String output = input;
@@ -69,8 +78,8 @@ public class Action {
             MatchResult matchResult = regexMatcher.toMatchResult();
             String group = matchResult.group();
             String inner = StringUtils.substring(group, 2, group.length() - 1);
-            String innerValue = get(inner);
-            output = output.replace(group, innerValue != null ? innerValue : "null");
+            String innerValue = root.get(inner);
+            output = output.replace(group, innerValue != null ? innerValue : "<null>");
         }
         return output;
     }
@@ -119,5 +128,9 @@ public class Action {
     public Action parent(Action parent) {
         this.parent = parent;
         return this;
+    }
+
+    public void setRunner(String runner) {
+        this.runner = runner;
     }
 }
