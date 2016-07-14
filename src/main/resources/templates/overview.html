@@ -23,13 +23,23 @@
                     <span data-toggle="collapse" data-parent="#accordion" th:href="'#' + ${plan.name}">
                         <span th:text="${plan.name}"/>
                         <span style="float:left; padding-right:15px">
-                            <span th:if="${plan.state.successful} == true">
-                                <span style="color:green" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                            </span>
-                            <span th:if="${plan.state.successful} == false">
-                                <span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                             </span>
-                            <span th:if="${plan.state.successful} == null">?</span>
+                            <div th:if="${plan.active} == true" th:remove="tag">
+                                <span th:if="${plan.state.last} == null">
+                                    <span style="color:#ff7864" class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                </span>
+                                <span th:if="${plan.state.last} != null">
+                                    <span th:if="${plan.state.successful} == true">
+                                        <span style="color:green" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                    </span>
+                                    <span th:if="${plan.state.successful} == false">
+                                        <span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </span>
+                                </span>
+
+                            </div>
+                            <div th:if="${plan.active == false} " th:remove="tag">
+                                <span style="color:grey" class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                            </div>
                         </span>
                         <span th:unless="${plan.state.last} == null" style="float:right"><span th:text="${#temporals.format(plan.state.getLast(), 'yyyy-MM-dd HH:mm:ss')}"/></span>
                     </span>

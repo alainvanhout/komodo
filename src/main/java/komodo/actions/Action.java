@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 public class Action {
     private String name;
+    private boolean active = true;
     private String runner = Runners.AND_CHECK_RUNNER;
     private List<Action> check = new ArrayList<>();
 
@@ -79,7 +80,7 @@ public class Action {
             String group = matchResult.group();
             String inner = StringUtils.substring(group, 2, group.length() - 1);
             String innerValue = root.get(inner);
-            output = output.replace(group, innerValue != null ? innerValue : "<null>");
+            output = output.replace(group, innerValue != null ? innerValue : "<not found>");
         }
         return output;
     }
@@ -132,5 +133,13 @@ public class Action {
 
     public void setRunner(String runner) {
         this.runner = runner;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

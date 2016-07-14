@@ -106,7 +106,7 @@ public class CombinedAction extends Action {
 
     @Override
     public State getState() {
-        return configAction.getState();
+        return runnerAction.getState();
     }
 
     @Override

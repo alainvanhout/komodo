@@ -46,7 +46,7 @@ public class PlanService {
     public void reload() {
         reloadConfig();
         loaders.forEach(PlanLoader::reload);
-        getPlans().forEach(p -> p.init(configAction));
+        getPlans().forEach(p -> p.init(null));
     }
 
     private void reloadConfig() {
