@@ -1,6 +1,8 @@
 package komodo.plans.loaders;
 
 import komodo.plans.Plan;
+import komodo.plans.loaders.file.JsonFileLoader;
+import komodo.plans.loaders.file.YamlFileLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
 public class FolderPlanLoader implements PlanLoader {
 
     private File folder;
-    private List<FilePlanLoader> loaders = new ArrayList<>();
+    private List<PlanLoader> loaders = new ArrayList<>();
 
     public FolderPlanLoader(File folder) {
         this.folder = folder;
@@ -30,8 +32,14 @@ public class FolderPlanLoader implements PlanLoader {
         try {
             Files.walk(Paths.get(folder.getAbsolutePath())).forEach(filePath -> {
                 if (Files.isRegularFile(filePath)) {
-                    if (filePath.toFile().getName().endsWith(".json")) {
-                        FilePlanLoader loader = new FilePlanLoader(filePath.toFile());
+                    File file = filePath.toFile();
+                    if (JsonFileLoader.canLoad(file)) {
+                        JsonFileLoader loader = new JsonFileLoader(file);
+                        loader.reload();
+                        loaders.add(loader);
+                    }
+                    if (YamlFileLoader.canLoad(file)) {
+                        YamlFileLoader loader = new YamlFileLoader(file);
                         loader.reload();
                         loaders.add(loader);
                     }

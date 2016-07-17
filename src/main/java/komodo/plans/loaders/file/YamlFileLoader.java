@@ -1,6 +1,9 @@
-package komodo.plans.loaders;
+package komodo.plans.loaders.file;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import komodo.plans.Plan;
+import komodo.plans.loaders.PlanLoader;
 import komodo.utils.JsonUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -11,12 +14,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FilePlanLoader implements PlanLoader {
+public class YamlFileLoader implements PlanLoader {
 
     private File file;
     private Plan plan;
 
-    public FilePlanLoader(File file) {
+    public YamlFileLoader(File file) {
         this.file = file;
     }
 
@@ -26,14 +29,17 @@ public class FilePlanLoader implements PlanLoader {
             throw new IllegalArgumentException("File does not exist: " + file.getAbsolutePath());
         }
         FileInputStream input = null;
+
+
         try {
+            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
             input = new FileInputStream(file);
-            plan = JsonUtil.toObject(IOUtils.toString(input), Plan.class);
+            plan = mapper.readValue(input, Plan.class);
             if (StringUtils.isBlank(plan.getName())) {
-                plan.setName(StringUtils.substringBeforeLast(file.getName(), ".json"));
+                plan.setName(StringUtils.substringBeforeLast(file.getName(), ".yml"));
             }
         } catch (IOException e) {
-            throw new IllegalArgumentException("Could not access file: " + file.getAbsolutePath());
+            throw new IllegalArgumentException("Could not access file: " + file.getAbsolutePath(), e);
         } finally {
             IOUtils.closeQuietly(input);
         }
@@ -48,5 +54,9 @@ public class FilePlanLoader implements PlanLoader {
     @Override
     public List<Plan> getPlans() {
         return Arrays.asList(plan);
+    }
+
+    public static boolean canLoad(File file) {
+        return file.getName().toLowerCase().endsWith(".yml");
     }
 }
