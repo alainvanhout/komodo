@@ -35,7 +35,7 @@ public class UrlChecker implements ActionRunner {
         Map<String, String> map = new HashMap();
         map.put(URL, "The url to be checked");
         map.put(METHOD, "HTTP method/verb (default: " + defaultMethod + ")");
-        map.put(TIMEOUT, "Connection timeout(default: " + defaultTimeout + ")");
+        map.put(TIMEOUT, "Connection timeout in milliseconds (default: " + defaultTimeout + ")");
         map.put(USERNAME, "Basic authentication username (optional)");
         map.put(PASSWORD, "Basic authentication password (optional)");
         return map;

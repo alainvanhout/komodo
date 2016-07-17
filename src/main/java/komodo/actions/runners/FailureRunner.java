@@ -20,7 +20,6 @@ public class FailureRunner implements ActionRunner {
         return Runners.FAILURE_RUNNER;
     }
 
-
     @Override
     public Map<String, String> getParameters(){
         return Collections.emptyMap();

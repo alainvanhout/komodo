@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @RestController
 public class RunnerController {
@@ -16,7 +17,9 @@ public class RunnerController {
     private RunnerService runnerService;
 
     @RequestMapping(value = "runners", produces = "application/json")
-    public Map<String, ActionRunner> namedActions() {
-        return runnerService.getRunners();
+    public Collection<ActionRunner> runners() {
+        return runnerService.getRunners().values().stream()
+                .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
+                .collect(Collectors.toList());
     }
 }
