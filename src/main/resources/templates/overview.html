@@ -43,7 +43,7 @@
                         </span>
                         <span th:unless="${plan.state.last} == null" style="float:right">
                             <small style="margin-right:10px" th:text="${#temporals.format(plan.state.getLast(), 'yyyy-MM-dd')}"/>
-                            <span th:text="${#temporals.format(plan.state.getLast(), 'HH:mm:ss')}"/>
+                            <span th:text="${#temporals.format(plan.state.getLast(), 'HH:mm:ss')}"/><small th:text="${#temporals.format(plan.state.getLast(), ',SSS')}"/>
                         </span>
                     </span>
                 </h4>

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class TimerService {
 
@@ -19,7 +21,9 @@ public class TimerService {
     public void timer() {
         for (Plan plan : planService.getPlans()) {
             if (plan.shouldRun()) {
-                runnerService.run(new CombinedAction(plan, planService.getConfigAction()), null);
+                CompletableFuture.runAsync(() ->
+                    runnerService.run(new CombinedAction(plan, planService.getConfigAction()), null)
+                );
             }
         }
     }
