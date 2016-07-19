@@ -54,12 +54,14 @@
                         <div>
                             <table class="table table-striped">
                                 <thead>
+                                    <th></th>
                                     <th>Config key</th>
                                     <th>Raw value</th>
                                     <th>Interpreted value</th>
                                 </thead>
                                 <tbody>
-                                <tr th:each="configEntry : ${plan.config}">
+                                <tr th:each="configEntry : ${plan.fullConfig}">
+                                    <td th:text="${plan.config.containsKey(configEntry.key) ? 'internal' : 'external'}"></td>
                                     <td th:text="${configEntry.key}"></td>
                                     <td th:text="${configEntry.value}"></td>
                                     <td th:text="${plan.get(configEntry.key)}"></td>

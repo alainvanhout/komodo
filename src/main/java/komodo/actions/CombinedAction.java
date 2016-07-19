@@ -1,5 +1,6 @@
 package komodo.actions;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ public class CombinedAction extends Action {
         return interpret(value, this);
     }
 
+
+
     @Override
     public String get(String key, String defaultValue, Action root) {
         String value = runnerAction.get(key, root);
@@ -76,7 +79,10 @@ public class CombinedAction extends Action {
 
     @Override
     public Map<String, String> getConfig() {
-        return configAction.getConfig();
+        Map<String, String> map = new HashMap<>();
+        map.putAll(configAction.getFullConfig());
+        map.putAll(runnerAction.getFullConfig());
+        return map;
     }
 
     @Override

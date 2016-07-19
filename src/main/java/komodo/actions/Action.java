@@ -106,6 +106,15 @@ public class Action {
         return config;
     }
 
+    public Map<String, String> getFullConfig() {
+        Map<String, String> map = new HashMap<>();
+        map.putAll(getConfig());
+        if (parent != null) {
+            map.putAll(parent.getFullConfig());
+        }
+        return map;
+    }
+
     public void setConfig(Map<String, String> config) {
         this.config = config;
     }
