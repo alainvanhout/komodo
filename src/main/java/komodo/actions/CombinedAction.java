@@ -41,7 +41,7 @@ public class CombinedAction extends Action {
 
     @Override
     public String get(String key, String defaultValue) {
-        String value = getValue(key, defaultValue, this);
+        String value = get(key, defaultValue, this);
         return interpret(value, this);
     }
 

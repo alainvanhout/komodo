@@ -54,7 +54,7 @@ public class Action {
         return interpret(value, root);
     }
 
-    protected String getValue(String key, String defaultValue, Action root) {
+    private String getValue(String key, String defaultValue, Action root) {
         String value = null;
         // first check config
         if (config.containsKey(key)) {

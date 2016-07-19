@@ -22,16 +22,16 @@ public class MailSender implements ActionRunner {
     @Value("${komodo.defaults.mailsender.host:localhost}")
     private String defaultHost;
 
-    @Value("${komodo.defaults.mailsender.port:}")
+    @Value("${komodo.defaults.mailsender.port:#{null}}")
     private String defaultPort;
 
-    @Value("${komodo.defaults.mailsender.to:}")
+    @Value("${komodo.defaults.mailsender.to:#{null}}")
     private String defaultTo;
 
-    @Value("${komodo.defaults.mailsender.subject:}")
+    @Value("${komodo.defaults.mailsender.subject:#{null}}")
     private String defaultSubject;
 
-    @Value("${komodo.defaults.mailsender.text:}")
+    @Value("${komodo.defaults.mailsender.text:#{null}}")
     private String defaultText;
 
     @Override
@@ -75,7 +75,7 @@ public class MailSender implements ActionRunner {
     private JavaMailSenderImpl createSender(Action action) {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost(action.get(HOST, defaultHost));
-        sender.setPort(Integer.parseInt(action.get(PORT, defaultPort)));
+        sender.setPort(Integer.parseInt(action.get(PORT)));
         return sender;
     }
 }
