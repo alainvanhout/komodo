@@ -2,6 +2,7 @@ package komodo.plans.loaders;
 
 import komodo.plans.Plan;
 import komodo.plans.loaders.file.JsonFileLoader;
+import komodo.plans.loaders.file.XmlFileLoader;
 import komodo.plans.loaders.file.YamlFileLoader;
 
 import java.io.File;
@@ -40,6 +41,11 @@ public class FolderPlanLoader implements PlanLoader {
                     }
                     if (YamlFileLoader.canLoad(file)) {
                         YamlFileLoader loader = new YamlFileLoader(file);
+                        loader.reload();
+                        loaders.add(loader);
+                    }
+                    if (XmlFileLoader.canLoad(file)) {
+                        XmlFileLoader loader = new XmlFileLoader(file);
                         loader.reload();
                         loaders.add(loader);
                     }
