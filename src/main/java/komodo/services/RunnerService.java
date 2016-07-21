@@ -4,8 +4,8 @@ import komodo.actions.Action;
 import komodo.actions.CombinedAction;
 import komodo.actions.runners.ActionRunner;
 import komodo.actions.runners.Runners;
-import komodo.plans.loaders.FolderPlanLoader;
-import komodo.plans.loaders.PlanLoader;
+import komodo.plans.loaders.FolderActionLoader;
+import komodo.plans.loaders.ActionLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,9 +37,9 @@ public class RunnerService {
 
         File folder = new File(namedActionsPath);
         if (folder.exists()){
-            PlanLoader namedActionsLoader = new FolderPlanLoader(folder);
+            ActionLoader namedActionsLoader = new FolderActionLoader(folder);
             namedActionsLoader.load();
-            for (Action action : namedActionsLoader.getPlans()) {
+            for (Action action : namedActionsLoader.getActions()) {
                 action.init(null);
                 namedActions.put(action.getName(), action);
             }

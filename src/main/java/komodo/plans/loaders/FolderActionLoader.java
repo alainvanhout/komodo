@@ -1,6 +1,6 @@
 package komodo.plans.loaders;
 
-import komodo.plans.Plan;
+import komodo.actions.Action;
 import komodo.plans.loaders.file.JsonFileLoader;
 import komodo.plans.loaders.file.XmlFileLoader;
 import komodo.plans.loaders.file.YamlFileLoader;
@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FolderPlanLoader implements PlanLoader {
+public class FolderActionLoader implements ActionLoader {
 
     private File folder;
-    private List<PlanLoader> loaders = new ArrayList<>();
+    private List<ActionLoader> loaders = new ArrayList<>();
 
-    public FolderPlanLoader(File folder) {
+    public FolderActionLoader(File folder) {
         this.folder = folder;
     }
 
@@ -63,9 +63,9 @@ public class FolderPlanLoader implements PlanLoader {
     }
 
     @Override
-    public List<Plan> getPlans() {
+    public List<Action> getActions() {
         return loaders.stream()
-                .flatMap(l -> l.getPlans().stream())
+                .flatMap(l -> l.getActions().stream())
                 .collect(Collectors.toList());
     }
 }

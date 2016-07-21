@@ -2,8 +2,8 @@ package komodo.services;
 
 import komodo.actions.Action;
 import komodo.plans.Plan;
-import komodo.plans.loaders.FolderPlanLoader;
-import komodo.plans.loaders.PlanLoader;
+import komodo.plans.loaders.FolderActionLoader;
+import komodo.plans.loaders.ActionLoader;
 import komodo.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,9 @@ public class PlanService {
     @Value("${komodo.init.configaction:config.json}")
     private String configActionPath;
 
-    private List<PlanLoader> loaders = new ArrayList<>();
+    private List<ActionLoader> loaders = new ArrayList<>();
     private Action configAction = new Action();
+    private List<Plan> plans;
 
     @PostConstruct
     public void load() {
@@ -39,14 +40,15 @@ public class PlanService {
 //        loaders.add(new GitRepositoryPlanLoader("file:///C:/Projects/testrepo"));
         File folder = new File(planPath);
         if (folder.exists()) {
-            loaders.add(new FolderPlanLoader(folder));
+            loaders.add(new FolderActionLoader(folder));
         }
     }
 
     public void reload() {
         reloadConfig();
-        loaders.forEach(PlanLoader::reload);
-        getPlans().forEach(p -> p.init(null));
+        loaders.forEach(ActionLoader::reload);
+        plans = loadPlans();
+        plans.forEach(p -> p.getAction().init(null));
     }
 
     private void reloadConfig() {
@@ -57,17 +59,22 @@ public class PlanService {
         }
     }
 
-    public List<Plan> getPlans() {
+    private List<Plan> loadPlans() {
         return loaders.stream()
-                .flatMap(p -> p.getPlans().stream())
+                .flatMap(action -> action.getActions().stream())
+                .map(action -> new Plan(action).init())
                 .collect(Collectors.toList());
     }
 
-    public List<PlanLoader> getLoaders() {
+    public List<ActionLoader> getLoaders() {
         return loaders;
     }
 
     public Action getConfigAction() {
         return configAction;
+    }
+
+    public List<Plan> getPlans() {
+        return plans;
     }
 }

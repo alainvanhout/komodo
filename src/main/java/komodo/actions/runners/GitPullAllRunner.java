@@ -1,8 +1,8 @@
 package komodo.actions.runners;
 
 import komodo.actions.Action;
-import komodo.plans.loaders.GitRepositoryPlanLoader;
-import komodo.plans.loaders.PlanLoader;
+import komodo.plans.loaders.GitRepositoryActionLoader;
+import komodo.plans.loaders.ActionLoader;
 import komodo.services.PlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,9 +30,9 @@ public class GitPullAllRunner implements ActionRunner {
     @Override
     public Boolean run(Action action) {
         try {
-            List<PlanLoader> loaders = planService.getLoaders();
-            for (PlanLoader loader : loaders) {
-                if (loader instanceof GitRepositoryPlanLoader) {
+            List<ActionLoader> loaders = planService.getLoaders();
+            for (ActionLoader loader : loaders) {
+                if (loader instanceof GitRepositoryActionLoader) {
                     loader.reload();
                 }
             }

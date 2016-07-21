@@ -22,7 +22,7 @@ public class TimerService {
         for (Plan plan : planService.getPlans()) {
             if (plan.shouldRun()) {
                 CompletableFuture.runAsync(() ->
-                    runnerService.run(new CombinedAction(plan, planService.getConfigAction()), null)
+                    runnerService.run(new CombinedAction(plan.getAction(), planService.getConfigAction()), null)
                 );
             }
         }

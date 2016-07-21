@@ -20,18 +20,18 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <span data-toggle="collapse" data-parent="#accordion" th:href="'#' + ${plan.name}">
-                        <span th:text="${plan.name}"/>
+                    <span data-toggle="collapse" data-parent="#accordion" th:href="'#' + ${plan.action.name}">
+                        <span th:text="${plan.action.name}"/>
                         <span style="float:left; padding-right:15px">
                             <div th:if="${plan.active} == true" th:remove="tag">
-                                <span th:if="${plan.state.last} == null">
+                                <span th:if="${plan.action.state.last} == null">
                                     <span style="color:#ff7864" class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
                                 </span>
-                                <span th:if="${plan.state.last} != null">
-                                    <span th:if="${plan.state.successful} == true">
+                                <span th:if="${plan.action.state.last} != null">
+                                    <span th:if="${plan.action.state.successful} == true">
                                         <span style="color:green" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                                     </span>
-                                    <span th:if="${plan.state.successful} == false">
+                                    <span th:if="${plan.action.state.successful} == false">
                                         <span style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                     </span>
                                 </span>
@@ -41,14 +41,14 @@
                                 <span style="color:grey" class="glyphicon glyphicon-pause" aria-hidden="true"></span>
                             </div>
                         </span>
-                        <span th:unless="${plan.state.last} == null" style="float:right">
-                            <small style="margin-right:10px" th:text="${#temporals.format(plan.state.getLast(), 'yyyy-MM-dd')}"/>
-                            <span th:text="${#temporals.format(plan.state.getLast(), 'HH:mm:ss')}"/><small th:text="${#temporals.format(plan.state.getLast(), ',SSS')}"/>
+                        <span th:unless="${plan.action.state.last} == null" style="float:right">
+                            <small style="margin-right:10px" th:text="${#temporals.format(plan.action.state.getLast(), 'yyyy-MM-dd')}"/>
+                            <span th:text="${#temporals.format(plan.action.state.getLast(), 'HH:mm:ss')}"/><small th:text="${#temporals.format(plan.action.state.getLast(), ',SSS')}"/>
                         </span>
                     </span>
                 </h4>
             </div>
-            <div th:id="${plan.name}" class="panel-collapse collapse">
+            <div th:id="${plan.action.name}" class="panel-collapse collapse">
                 <div class="panel-body">
                     <div>
                         <div>
@@ -60,11 +60,11 @@
                                     <th>Interpreted value</th>
                                 </thead>
                                 <tbody>
-                                <tr th:each="configEntry : ${plan.fullConfig}">
-                                    <td th:text="${plan.config.containsKey(configEntry.key) ? 'internal' : 'external'}"></td>
+                                <tr th:each="configEntry : ${plan.action.fullConfig}">
+                                    <td th:text="${plan.action.config.containsKey(configEntry.key) ? 'internal' : 'external'}"></td>
                                     <td th:text="${configEntry.key}"></td>
                                     <td th:text="${configEntry.value}"></td>
-                                    <td th:text="${plan.get(configEntry.key)}"></td>
+                                    <td th:text="${plan.action.get(configEntry.key)}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -74,7 +74,7 @@
                     <div>
                         <div>Actions:</div>
                         <ul>
-                            <li th:each="action : ${plan.check}">
+                            <li th:each="action : ${plan.action.check}">
                                 <span th:text="${action.runner}"/>
                                 <span th:if="${action.state.successful} == true"> OK</span>
                                 <span th:if="${action.state.successful} == false"> Failure </span>

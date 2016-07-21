@@ -1,7 +1,8 @@
 package komodo.plans.loaders.file;
 
+import komodo.actions.Action;
 import komodo.plans.Plan;
-import komodo.plans.loaders.PlanLoader;
+import komodo.plans.loaders.ActionLoader;
 import komodo.utils.JsonUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -12,10 +13,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class JsonFileLoader implements PlanLoader {
+public class JsonFileLoader implements ActionLoader {
 
     private File file;
-    private Plan plan;
+    private Action action;
 
     public JsonFileLoader(File file) {
         this.file = file;
@@ -29,9 +30,9 @@ public class JsonFileLoader implements PlanLoader {
         FileInputStream input = null;
         try {
             input = new FileInputStream(file);
-            plan = JsonUtil.toObject(IOUtils.toString(input), Plan.class);
-            if (StringUtils.isBlank(plan.getName())) {
-                plan.setName(StringUtils.substringBeforeLast(file.getName(), ".json"));
+            action = JsonUtil.toObject(IOUtils.toString(input), Action.class);
+            if (StringUtils.isBlank(action.getName())) {
+                action.setName(StringUtils.substringBeforeLast(file.getName(), ".json"));
             }
         } catch (IOException e) {
             throw new IllegalArgumentException("Could not access file: " + file.getAbsolutePath(), e);
@@ -42,13 +43,13 @@ public class JsonFileLoader implements PlanLoader {
 
     @Override
     public void reload() {
-        plan = null;
+        action = null;
         load();
     }
 
     @Override
-    public List<Plan> getPlans() {
-        return Arrays.asList(plan);
+    public List<Action> getActions() {
+        return Arrays.asList(action);
     }
 
     public static boolean canLoad(File file) {
