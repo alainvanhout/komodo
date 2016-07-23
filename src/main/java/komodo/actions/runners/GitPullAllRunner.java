@@ -1,8 +1,8 @@
 package komodo.actions.runners;
 
 import komodo.actions.Action;
-import komodo.plans.loaders.GitRepositoryActionLoader;
-import komodo.plans.loaders.ActionLoader;
+import komodo.actions.loaders.GitRepositoryActionLoader;
+import komodo.actions.loaders.ActionLoader;
 import komodo.services.PlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

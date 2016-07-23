@@ -1,10 +1,10 @@
-package komodo.plans.loaders.file;
+package komodo.actions.loaders.file;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.extended.NamedMapConverter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import komodo.actions.Action;
-import komodo.plans.loaders.ActionLoader;
+import komodo.actions.loaders.ActionLoader;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 

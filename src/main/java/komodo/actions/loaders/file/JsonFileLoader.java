@@ -1,8 +1,7 @@
-package komodo.plans.loaders.file;
+package komodo.actions.loaders.file;
 
 import komodo.actions.Action;
-import komodo.plans.Plan;
-import komodo.plans.loaders.ActionLoader;
+import komodo.actions.loaders.ActionLoader;
 import komodo.utils.JsonUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;

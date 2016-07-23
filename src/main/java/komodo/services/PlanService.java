@@ -2,8 +2,8 @@ package komodo.services;
 
 import komodo.actions.Action;
 import komodo.plans.Plan;
-import komodo.plans.loaders.FolderActionLoader;
-import komodo.plans.loaders.ActionLoader;
+import komodo.actions.loaders.FolderActionLoader;
+import komodo.actions.loaders.ActionLoader;
 import komodo.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

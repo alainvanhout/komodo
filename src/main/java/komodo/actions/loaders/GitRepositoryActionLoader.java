@@ -1,4 +1,4 @@
-package komodo.plans.loaders;
+package komodo.actions.loaders;
 
 import komodo.actions.Action;
 import org.eclipse.jgit.api.Git;

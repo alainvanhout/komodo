@@ -1,9 +1,9 @@
-package komodo.plans.loaders;
+package komodo.actions.loaders;
 
 import komodo.actions.Action;
-import komodo.plans.loaders.file.JsonFileLoader;
-import komodo.plans.loaders.file.XmlFileLoader;
-import komodo.plans.loaders.file.YamlFileLoader;
+import komodo.actions.loaders.file.JsonFileLoader;
+import komodo.actions.loaders.file.XmlFileLoader;
+import komodo.actions.loaders.file.YamlFileLoader;
 
 import java.io.File;
 import java.io.IOException;
