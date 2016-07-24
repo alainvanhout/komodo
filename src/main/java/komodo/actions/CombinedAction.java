@@ -31,30 +31,12 @@ public class CombinedAction extends Action {
     }
 
     @Override
-    public String get(String key, Action root) {
-        return get(key, null, root);
-    }
-
-    @Override
-    public String get(String key) {
-        return get(key, null, this);
-    }
-
-    @Override
-    public String get(String key, String defaultValue) {
-        String value = get(key, defaultValue, this);
-        return interpret(value, this);
-    }
-
-
-
-    @Override
     public String get(String key, String defaultValue, Action root) {
         String value = runnerAction.get(key, root);
         if (value == null) {
             value = configAction.get(key, defaultValue, root);
         }
-        return value;
+        return interpret(value, root);
     }
 
     @Override

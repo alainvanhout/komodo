@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class Action {
     private String name;
     private boolean active = true;
-    private String runner = Runners.AND_CHECK_RUNNER;
+    protected String runner = Runners.AND_CHECK_RUNNER;
     private List<Action> check = new ArrayList<>();
 
     private List<Action> success = new ArrayList<>();
@@ -22,11 +22,14 @@ public class Action {
     private Map<String, String> config = new HashMap<>();
 
     private transient Action parent;
-    private transient Context context =  new Context();
+    private transient Context context = new Context();
     private transient State state = new State();
 
     public String getRunner() {
         return runner;
+    }
+
+    public Action() {
     }
 
     public void init(Action parent) {
@@ -44,10 +47,11 @@ public class Action {
         return get(key, null, root);
     }
 
+
     public String get(String key, String defaultValue) {
-        String value = getValue(key, defaultValue, this);
-        return interpret(value, this);
+        return get(key, defaultValue, this);
     }
+
 
     public String get(String key, String defaultValue, Action root) {
         String value = getValue(key, defaultValue, root);
@@ -61,11 +65,11 @@ public class Action {
             value = config.get(key);
         }
         // then ask parent
-        if (value == null && parent != null){
+        if (value == null && parent != null) {
             value = parent.get(key, defaultValue, root);
         }
         // fallback on default
-        if (value == null){
+        if (value == null) {
             value = defaultValue;
         }
         return value;

@@ -2,6 +2,7 @@ package komodo.services;
 
 import komodo.actions.Action;
 import komodo.actions.CombinedAction;
+import komodo.actions.DelegatingAction;
 import komodo.actions.runners.ActionRunner;
 import komodo.actions.runners.Runners;
 import komodo.actions.loaders.FolderActionLoader;
@@ -56,13 +57,13 @@ public class RunnerService {
 
         Action runnerAction = action;
 
-        if (caller != null){
+        if (caller != null && action != caller){
             runnerAction = new CombinedAction(action, caller);
         }
 
         if (namedActions.containsKey(runnerAction.getRunner())) {
             Action namedAction = namedActions.get(runnerAction.getRunner());
-            return run(new CombinedAction(namedAction, runnerAction), null);
+            return run(new DelegatingAction(runnerAction, namedAction), null);
         }
 
         if (!runners.containsKey(runnerAction.getRunner())) {

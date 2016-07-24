@@ -1,6 +1,7 @@
 package komodo.services;
 
 import komodo.actions.CombinedAction;
+import komodo.actions.ConfigDecoratingAction;
 import komodo.plans.Plan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +23,7 @@ public class TimerService {
         for (Plan plan : planService.getPlans()) {
             if (plan.shouldRun()) {
                 CompletableFuture.runAsync(() ->
-                    runnerService.run(new CombinedAction(plan.getAction(), planService.getConfigAction()), null)
+                    runnerService.run(new ConfigDecoratingAction(plan.getAction(), planService.getConfigAction()), null)
                 );
             }
         }
