@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>komodo</groupId>
-	<artifactId>komodo</artifactId>
+	<artifactId>komodo-monitor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Komodo</name>
-	<description>Komodo</description>
+	<name>komodo-monitor</name>
+	<description>komodo-monitor</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
