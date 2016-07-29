@@ -2,7 +2,7 @@ package komodo.actions.runners;
 
 public interface Runners {
     // check runners
-    String AND_CHECK_RUNNER = "and-check-runner";
+    String ASYNC_AND = "async-and";
     // success/failure runners
     String SUCCESS_RUNNER = "success-runner";
     String FAILURE_RUNNER = "failure-runner";
@@ -12,4 +12,6 @@ public interface Runners {
     String URL_CHECK = "url-check";
     String GIT_PULL_ALL = "git-pull-all";
     String PING = "ping";
+    String LAZY_AND = "lazy-and";
+    String TIME = "time";
 }

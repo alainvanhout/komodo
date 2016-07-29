@@ -49,7 +49,7 @@ public class RunnerService {
 
     public Boolean run(Action action, Action caller) {
         boolean success = run(action, caller, action.getRunner());
-        action.getState().setSuccessful(success);
+        caller.getState().setSuccessful(success);
         return success;
     }
 
@@ -72,6 +72,7 @@ public class RunnerService {
 
         runnerAction.getState().setLast(LocalDateTime.now());
         Boolean success = runners.get(runner).run(runnerAction);
+        runnerAction.getState().setSuccessful(success);
 
         // handle success or failure
         // but ignore when null

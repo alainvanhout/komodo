@@ -36,8 +36,11 @@ public class GitPullAllRunner implements ActionRunner {
                     loader.reload();
                 }
             }
+
+            action.getState().setSuccessful(true);
             return true;
         } catch (Exception e) {
+            action.getState().setSuccessful(false);
             return false;
         }
     }

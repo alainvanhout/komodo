@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class Action {
     private String name;
     private boolean active = true;
-    protected String runner = Runners.AND_CHECK_RUNNER;
+    protected String runner = Runners.ASYNC_AND;
     private List<Action> check = new ArrayList<>();
 
     private List<Action> success = new ArrayList<>();

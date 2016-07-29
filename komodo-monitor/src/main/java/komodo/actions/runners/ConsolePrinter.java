@@ -28,6 +28,7 @@ public class ConsolePrinter implements ActionRunner {
     public Boolean run(Action action) {
         System.out.println(LocalTime.now() + " " + action.get(MESSAGE));
         // inherently always succeeds
+        action.getState().setSuccessful(true);
         return true;
     }
 }

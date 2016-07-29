@@ -66,8 +66,11 @@ public class MailSender implements ActionRunner {
             helper.setText(text);
 
             sender.send(message);
+
+            action.getState().setSuccessful(true);
             return true;
         } catch (Exception e) {
+            action.getState().setSuccessful(false);
             return false;
         }
     }
