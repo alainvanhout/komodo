@@ -1,0 +1,41 @@
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <span data-toggle="collapse" data-parent="#accordion" temp-ref="nameLink">
+                    <span temp-ref="nameSpan"></span>
+                    <span style="float:left; padding-right:15px">
+                        <span style="color:#ff7864" class="glyphicon" aria-hidden="true" temp-ref="statusGlyph"></span>
+                    </span>
+                </span>
+                <span style="float:right">
+                    <small style="margin-right:10px" temp-ref="updateDate"></small>
+                    <span temp-ref="updateTime"></span>
+                    <small temp-ref="updateMillis"></small>
+                </span>
+            </h4>
+        </div>
+
+        <div temp-ref="collapsePanel" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div>
+                    <div>
+                        <table class="table table-striped">
+                            <thead>
+                            <th>Config key</th>
+                            <th>Raw value</th>
+                            </thead>
+                            <tbody temp-ref="configBody">
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div>
+                    <div>Interval: <span temp-ref="interval"/></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
