@@ -1,33 +1,21 @@
 loader
     .loadTemplate("plan", "plan/plan.html")
+    .loadCSS("plan/plan.css")
     .perform(function(){
 
         dom.using('tr', 'td');
 
         function statusGlyph(plan){
             if (!plan.active){
-                return "glyphicon-pause";
+                return "glyphicon-pause glyph-pause";
             }
             if (plan.lastUpdate == null){
-                return "glyphicon-question-sign";
+                return "glyphicon-question-sign glyph-question";
             }
             if (plan.successful){
-                return "glyphicon-ok";
+                return "glyphicon-ok glyph-ok";
             }
-            return "glyphicon-remove";
-        }
-
-        function statusColor(plan){
-            if (!plan.active){
-                return "grey";
-            }
-            if (plan.lastUpdate == null){
-                return "#ff7864";
-            }
-            if (plan.successful){
-                return "green";
-            }
-            return "red";
+            return "glyphicon-remove glyph-error";
         }
 
         return function(plan){
@@ -37,11 +25,9 @@ loader
             template._nameSpan.add(plan.name);
             template._collapsePanel.add({id : plan.name});
 
-            template.update = function(plan){
-
+            template.set = function(plan){
                 template._statusGlyph.add({
                     'class' : "glyphicon " + statusGlyph(plan),
-                    style : "color:" + statusColor(plan)
                 })
 
                 if (plan.lastUpdate){
@@ -65,8 +51,7 @@ loader
                 });
             }
 
-
-            template.update(plan);
+            template.set(plan);
             return template;
         }
-    }).as("plan-factory");
+    }).as("plan-template");

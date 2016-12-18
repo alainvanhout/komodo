@@ -1,0 +1,15 @@
+.component-plan .glyph-pause {
+    color: grey;
+}
+
+.component-plan .glyph-question {
+    color: #ff7864;
+}
+
+.component-plan .glyph-ok {
+    color: green;
+}
+
+.component-plan .glyph-error {
+    color: red;
+}

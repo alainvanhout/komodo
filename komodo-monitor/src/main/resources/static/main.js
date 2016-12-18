@@ -1,19 +1,16 @@
 loader
-    .loadJS("plan/plan.js")
-    .load("plan-factory")
+    .loadJS("plan/plan-component.js")
+    .loadJS("plan/plan-service.js")
+    .load("plan-component")
+    .load("plan-service")
     .perform(function(){
-        var planFactory = loader.get("plan-factory");
+        var planComponent = loader.get("plan-component");
+        var planService = loader.get("plan-service");
+        var accordion = dom(document.getElementById("plan-list"));
 
-        $.getJSON("/plans", function(plans){
+        planService.findAll(function(plans){
             plans.forEach(function(plan){
-                console.log(plan);
-                var template = planFactory(plan);
-                $("#accordion").append(template);
-                setInterval(function(){
-                    $.getJSON("/plans/" + plan.name, function(plan){
-                        template.update(plan);
-                    });
-                }, 10000);
+                accordion.add(planComponent(plan));
             })
         });
     });

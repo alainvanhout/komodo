@@ -214,11 +214,11 @@ var loader = function() {
 				xhr(source, function(source) {
 					var template = templates.add(templateKey, source.text);
 					if (template.sources.length > 0){
-						template.sources.forEach(function(source){
+						template.sources.forEach(function(templateSource){
 							// create mutual link, to ensure that response is only performed after additional source has been loaded
 							// and that the additional source also nudges the response to re-evaluate its state (and possibly be ready to perform)
-							response.sources.push(source);
-							source.responses.push(response);
+							response.sources.push(templateSource);
+							templateSource.responses.push(response);
 						});
 					}
 					// only set to loaded when the potential other source dependencies have been added
